@@ -6,7 +6,6 @@ variable "naming_prefix" {
 variable "region" {
   description = "Azure region for resources (e.g. 'East US')"
   type        = string
-  default     = "East US"
 }
 
 variable "AZURE_SUBSCRIPTION_ID" {
