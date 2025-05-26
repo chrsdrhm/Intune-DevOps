@@ -35,11 +35,9 @@ jobs:
           azPSVersion: "latest"
           inlineScript: |
             $ctx = Get-AzContext
-            $maskedDomain = $ctx.Account.Id -replace '@.*', '@****'
             [PSCustomObject]@{
               SubscriptionName = $ctx.Subscription.Name
               SubscriptionId   = "****"
-              Account          = $maskedDomain
               TenantId         = "****"
               Environment      = $ctx.Environment.Name
             } | Format-List
