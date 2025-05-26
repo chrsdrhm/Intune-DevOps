@@ -1,5 +1,5 @@
 resource "azuread_group" "demo-group" {
-  display_name     = "Demo"
+  display_name     = "DevOps Demo"
   security_enabled = true
   types            = ["DynamicMembership"]
 
