@@ -1,12 +1,11 @@
-variable "naming_prefix" {
+variable "NAMING_PREFIX" {
   description = "Prefix for resource names"
   type        = string
 }
 
-variable "region" {
+variable "AZURE_REGION" {
   description = "Azure region for resources (e.g. 'East US')"
   type        = string
-  default     = "East US"
 }
 
 variable "AZURE_SUBSCRIPTION_ID" {
