@@ -17,14 +17,12 @@ Connect-MgGraph -AccessToken $(ConvertTo-SecureString -String $AccessToken -AsPl
 
 # Make a graph call
 $ctx = Get-MgContext
-$maskedDomain = $ctx.Account -replace '@.*', '@****'
 [PSCustomObject]@{
     ClientId            = "****"
     TenantId            = "****"
     Scopes              = "****"
     AuthType            = $ctx.AuthType
     TokenCredentialType = $ctx.TokenCredentialType
-    Account             = $maskedDomain
     AppName             = $ctx.AppName
     ContextScope        = $ctx.ContextScope
     PSHostVersion       = $ctx.PSHostVersion
