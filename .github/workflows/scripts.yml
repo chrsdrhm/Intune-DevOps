@@ -75,14 +75,12 @@ jobs:
           Write-Output "This is running from the Yaml"
           Connect-MgGraph -AccessToken $(ConvertTo-SecureString -String $($env:ACCESS_TOKEN) -AsPlainText -Force) -NoWelcome
           $ctx = Get-MgContext
-          $maskedDomain = $ctx.Account -replace '@.*', '@****'
           [PSCustomObject]@{
             ClientId            = "****"
             TenantId            = "****"
             Scopes              = "****"
             AuthType            = $ctx.AuthType
             TokenCredentialType = $ctx.TokenCredentialType
-            Account             = $maskedDomain
             AppName             = $ctx.AppName
             ContextScope        = $ctx.ContextScope
             PSHostVersion       = $ctx.PSHostVersion
