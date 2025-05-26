@@ -1,0 +1,149 @@
+name: Terraform
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - terraform/**
+  pull_request:
+    branches:
+      - main
+    paths:
+      - terraform/**
+  workflow_dispatch:
+
+permissions:
+  id-token: write
+  contents: read
+  pull-requests: write
+
+jobs:
+  Terraform-Analysis:
+    name: Generate Terraform Plan and approval
+    if: github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: terraform
+    steps:
+      - name: Entra login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          enable-AzPSSession: true
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Install the selected version of Terraform CLI
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        id: init
+        run: |
+          terraform init \
+            -backend-config="resource_group_name=${{ secrets.AZURE_TFBACKEND_RG }}" \
+            -backend-config="storage_account_name=${{ secrets.AZURE_TFBACKEND_SA }}" \
+            -backend-config="container_name=${{ secrets.AZURE_TFBACKEND_BLOB }}"
+
+      - name: Terraform Format
+        id: fmt
+        run: |
+          terraform fmt -check
+
+      - name: Terraform Validate
+        id: validate
+        run: |
+          terraform validate
+
+      - name: Terraform Plan
+        id: plan
+        run: |
+          terraform plan -no-color -input=false
+        env:
+          TF_VAR_AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+
+      - name: Update Pull Request with Terraform Plan
+        uses: actions/github-script@v7
+        env:
+          PLAN: "terraform\n${{ steps.plan.outputs.stdout }}"
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            function statusEmoji(outcome) {
+              return outcome === 'success' ? '✅' : '❌';
+            }
+
+            const initStatus = statusEmoji('${{ steps.init.outcome }}');
+            const fmtStatus = statusEmoji('${{ steps.fmt.outcome }}');
+            const validateStatus = statusEmoji('${{ steps.validate.outcome }}');
+            const planStatus = statusEmoji('${{ steps.plan.outcome }}');
+
+            const output = `#### Terraform Init: ${initStatus}
+            #### Terraform Format: ${fmtStatus}
+            #### Terraform Validate: ${validateStatus}
+            #### Terraform Plan: ${planStatus}
+            
+            <details><summary>Show Plan</summary>
+
+            \`\`\`\n
+            ${process.env.PLAN}
+            \`\`\`
+
+            </details>
+
+            Actor: @${{ github.actor }}
+            Trigger: \`${{ github.event_name }}\``;
+
+            github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: output
+            })
+
+      - name: Validate Terraform Plan status
+        if: steps.plan.outcome == 'failure'
+        run: exit 1
+
+  Terraform-Deploy:
+    name: Apply approved Terraform Plan
+    if: github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
+        working-directory: terraform
+
+    steps:
+      - name: Entra login
+        uses: azure/login@v2
+        with:
+          client-id: ${{ secrets.AZURE_CLIENT_ID }}
+          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
+          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
+          enable-AzPSSession: true
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Install the selected version of Terraform CLI
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+
+      - name: Terraform Init
+        run: |
+          terraform init \
+            -backend-config="resource_group_name=${{ secrets.AZURE_TFBACKEND_RG }}" \
+            -backend-config="storage_account_name=${{ secrets.AZURE_TFBACKEND_SA }}" \
+            -backend-config="container_name=${{ secrets.AZURE_TFBACKEND_BLOB }}"
+
+      - name: Terraform Apply
+        run: |
+          terraform apply -auto-approve
+        env:
+          TF_VAR_AZURE_SUBSCRIPTION_ID: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
