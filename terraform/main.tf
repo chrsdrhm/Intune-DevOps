@@ -11,7 +11,8 @@ module "entra" {
 }
 
 module "intune" {
-  source        = "./modules/intune"
-  NAMING_PREFIX = var.NAMING_PREFIX
-  tags          = local.tags
+  source         = "./modules/intune"
+  NAMING_PREFIX  = var.NAMING_PREFIX
+  tags           = local.tags
+  entra_group_id = module.entra.demo-group_id
 }
