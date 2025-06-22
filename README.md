@@ -10,6 +10,12 @@ The following events will trigger these workflows to execute:
 - scripts.yml runs daily, regardless of pull requests ... for example, these scripts may be used to automate processes, etc.
 - Manual execution (workflow dispatch)
 
+## GitHub Action in ... action
+The end result of how this works can be observed in:
+- [Pull request #15](https://github.com/chrsdrhm/Azure-DevOps/pull/15)
+- [Actions output for pull request #15](https://github.com/chrsdrhm/Azure-DevOps/actions/runs/15812050033/job/44564632489)
+- [Actions output on merge of pull request #15](https://github.com/chrsdrhm/Azure-DevOps/actions/runs/15812073864)
+
 In practice, I think a feature branch, dev branch, main branch approach would be best.  i.e., create a feature branch, open a pull request to dev branch, review tf plan output, merge to dev to execute tf apply, if everything applies as expected, then open a pull request to merge dev into main and execute tf apply on merge.  While this example doesn't account for a dev branch, this would address situtations where a successful tf plan fails to apply after merging to main.
 
 ## Setup local environment
