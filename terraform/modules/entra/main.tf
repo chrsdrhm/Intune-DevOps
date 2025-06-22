@@ -11,5 +11,5 @@ resource "azuread_group" "demo-group" {
 
 output "demo-group_id" {
   description = "The Entra group ID for the group created by demo-group"
-  value       = azuread_group.demo-group.id
+  value       = azuread_group.demo-group.object_id
 }
