@@ -72,6 +72,13 @@ Configure the following veriables using GitHub actions secrets / variables ... i
 - NAMING_PREFIX
     - A naming prefix that will be used for resource names ... alternatively you may configure this in your Terraform (variables.tf, locals.tf, tfvars, etc)
 
+Note that variables are defined both at the root and defined/passed into modules that use these variables.  Further, the following module-specific variables are used:
+- TAGS
+    - The common tag values passed in from locals.tf
+- ENTRA_GROUP_ID
+    - An example Entra group passed in as output from the group created in /modules/entra
+    - In practice, you might have multiples of these
+
 ## Work locally with remote tfstate
 Sometimes, such as for development / testing, you want to run Terraform locally rather than from GitHub Actions, but still use your 'backend' tfstate:
 1) az login

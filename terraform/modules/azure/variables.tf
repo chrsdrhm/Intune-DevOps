@@ -8,7 +8,7 @@ variable "NAMING_PREFIX" {
   type        = string
 }
 
-variable "tags" {
+variable "TAGS" {
   description = "Tags to apply to resources"
   type        = map(string)
 }
