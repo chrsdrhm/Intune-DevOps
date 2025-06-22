@@ -6,11 +6,6 @@ terraform {
   }
 }
 
-module "entra" {
-  source        = "../entra"
-  NAMING_PREFIX = var.NAMING_PREFIX
-}
-
 resource "microsoft365wp_device_compliance_policy" "android_compliance" {
   display_name = "Android Compliance Policy"
   description  = <<EOT
@@ -25,6 +20,6 @@ EOT
     security_block_jailbroken_devices = true
   }
   assignments = [
-    { target = { group = { group_id = module.entra.demo-group_id } } }
+    { target = { group = { group_id = var.entra_group_id } } }
   ]
 }
