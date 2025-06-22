@@ -66,17 +66,17 @@ Configure the following veriables using GitHub actions secrets / variables ... i
 - AZURE_TFBACKEND_BLOB
     - Blob container name where your backend tfstate is stored within your storate account
 - AZURE_REGION
-    - Azure region for your resources (e.g. 'East US') ... alternatively you may configure this in your Terraform (variables.tf, locals.tf, etc)
+    - Azure region for your resources (e.g. 'East US') ... alternatively you may configure this in your Terraform (variables.tf, locals.tf, tfvars, etc)
 - NAMING_PREFIX
-    - A naming prefix that will be used for resource names ... alternatively you may configure this in your Terraform (variables.tf, locals.tf, etc)
+    - A naming prefix that will be used for resource names ... alternatively you may configure this in your Terraform (variables.tf, locals.tf, tfvars, etc)
 
 ## Work locally with remote tfstate
 Sometimes, such as for development / testing, you want to run Terraform locally rather than from GitHub Actions, but still use your 'backend' tfstate:
 1) az login
 2) terraform init \  
-    -backend-config="resource_group_name=$AZURE_TFBACKEND_RG" \
-    -backend-config="storage_account_name=$AZURE_TFBACKEND_SA" \
-    -backend-config="container_name=$AZURE_TFBACKEND_BLOB"
+    -backend-config="resource_group_name=<backendResourceGroupName>" \
+    -backend-config="storage_account_name=<backendStorageAccountName>" \
+    -backend-config="container_name=<backendBlobContainerName>"
 3) terraform fmt -check
 4) terraform fmt validate
 5) terraform plan -out tfplan

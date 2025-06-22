@@ -2,7 +2,7 @@ resource "azurerm_resource_group" "rg1" {
   name     = "${var.NAMING_PREFIX}-rg1"
   location = var.AZURE_REGION
 
-  tags = local.tags
+  tags = var.tags
 }
 
 resource "azurerm_network_security_group" "nsg1" {
@@ -30,5 +30,5 @@ resource "azurerm_virtual_network" "vnet1" {
     security_group   = azurerm_network_security_group.nsg1.id
   }
 
-  tags = local.tags
+  tags = var.tags
 }
