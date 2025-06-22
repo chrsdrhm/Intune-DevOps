@@ -1,5 +1,5 @@
 # Azure-DevOps
-Working example repo for GitHub Actions to manage Intune, Entra, and Azure resources via Azure CLI, Azure PowerShell, Microsoft Graph, and Terraform.
+Working example repo for GitHub Actions to manage Intune, Entra, and Azure resources via Azure CLI, Azure PowerShell, Microsoft Graph, and Terraform.  This was a learning tool for myself as I explored CI/CD primarily for Microsoft Intune.
 
 In this example, 2 GitHub Actions workflows are used:
 - scripts.yml, working with Microsoft Graph and Azure via PowerShell and Azure CLI
