@@ -20,6 +20,6 @@ EOT
     security_block_jailbroken_devices = true
   }
   assignments = [
-    { target = { group = { group_id = var.entra_group_id } } }
+    { target = { group = { group_id = var.entra_group_id } } },
   ]
 }
