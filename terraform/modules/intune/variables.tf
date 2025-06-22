@@ -3,12 +3,12 @@ variable "NAMING_PREFIX" {
   type        = string
 }
 
-variable "tags" {
+variable "TAGS" {
   description = "Tags to apply to resources"
   type        = map(string)
 }
 
-variable "entra_group_id" {
-  description = "The Entra group ID to assign a compliance policy to"
+variable "ENTRA_GROUP_ID" {
+  description = "The Entra group ID for assignments"
   type        = string
 }
