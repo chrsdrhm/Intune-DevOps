@@ -41,7 +41,7 @@ The backend must be manually created / bootstrapped before running Terraform out
 2) az login
 3) terraform init
 4) terraform fmt -check
-5) terraform fmt validate
+5) terraform validate
 6) terraform plan -out tfplan
 7) terraform apply tfplan
 
