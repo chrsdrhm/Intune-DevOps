@@ -93,7 +93,7 @@ Sometimes, such as for development / testing, you want to run Terraform locally 
     -backend-config="storage_account_name=<backendStorageAccountName>" \
     -backend-config="container_name=<backendBlobContainerName>"
 3) terraform fmt -check
-4) terraform fmt validate
+4) terraform validate
 5) terraform plan -out tfplan
 6) terraform apply tfplan
 
